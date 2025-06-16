@@ -6,5 +6,6 @@ CREATE TABLE comics (
     author VARCHAR(50) NOT NULL,
     artist VARCHAR(50) NOT NULL,
     type VARCHAR(15) NOT NULL,
+    url VARCHAR(255) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

@@ -1,5 +1,6 @@
 package com.nurman.webtoon.service;
 
+import java.time.Instant;
 import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,11 +31,14 @@ public class ComicService {
     @Autowired
     private ImageService imageService;
 
+    @Autowired
+    private CloudinaryService cloudinaryService;
+
     @Transactional
     public void addComic(MultipartFile cover, ComicAddRequest request) {
         validationService.validate(request);
         imageService.validate(cover);
-        String filename = imageService.changeImageFilename(cover);
+        String filename = String.valueOf(Instant.now().toEpochMilli());
         Comic comic = new Comic();
         comic.setCover(filename);
         comic.setTitle(request.getTitle());
@@ -42,6 +46,8 @@ public class ComicService {
         comic.setAuthor(request.getAuthor());
         comic.setArtist(request.getArtist());
         comic.setType(request.getType().toUpperCase());
+        String urlCover = cloudinaryService.uploadImage(cover, filename);
+        comic.setUrl(urlCover);
         comicRepository.save(comic);
     }
 
@@ -53,10 +59,9 @@ public class ComicService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "comic not found"));
 
         if (Objects.nonNull(cover.getOriginalFilename())) {
-            System.out.println("lewat sini");
             imageService.validate(cover);
-            String filename = imageService.changeImageFilename(cover);
-            comic.setCover(filename);
+            String coverUrl = cloudinaryService.uploadImage(cover, comic.getCover());
+            comic.setUrl(coverUrl);
         }
         if (Objects.nonNull(request.getTitle())) {
             comic.setTitle(request.getTitle());
@@ -103,9 +108,9 @@ public class ComicService {
     @Transactional
     public void delete(String comicId) {
         var newId = Integer.parseInt(comicId);
-        if (!comicRepository.existsById(newId)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "comic not found");
-        }
+        var comic = comicRepository.findById(newId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "comic not found"));
+        cloudinaryService.deleteImage(comic.getCover());
         comicRepository.deleteById(newId);
     }
 }

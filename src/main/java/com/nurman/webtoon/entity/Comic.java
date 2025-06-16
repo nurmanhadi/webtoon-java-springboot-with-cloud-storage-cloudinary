@@ -33,6 +33,7 @@ public class Comic {
     private String author;
     private String artist;
     private String type;
+    private String url;
 
     @Column(name = "created_at")
     @CreationTimestamp

@@ -52,13 +52,13 @@ public class ComicController {
             + "/{comicId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(code = HttpStatus.OK)
     public WebResponse<String> updateComic(
-            @PathVariable("comicId") String comicId,
+            @PathVariable(value = "comicId", required = false) String comicId,
             @RequestParam(value = "cover", required = false) MultipartFile cover,
-            @RequestParam("title") String title,
-            @RequestParam("synopsis") String synopsis,
-            @RequestParam("author") String author,
-            @RequestParam("artist") String artist,
-            @RequestParam("type") String type) {
+            @RequestParam(value = "title", required = false) String title,
+            @RequestParam(value = "synopsis", required = false) String synopsis,
+            @RequestParam(value = "author", required = false) String author,
+            @RequestParam(value = "artist", required = false) String artist,
+            @RequestParam(value = "type", required = false) String type) {
 
         var request = new ComicUpdateRequest();
         request.setTitle(title);
