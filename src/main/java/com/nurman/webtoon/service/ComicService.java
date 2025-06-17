@@ -1,6 +1,8 @@
 package com.nurman.webtoon.service;
 
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,9 +15,11 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.nurman.webtoon.entity.Comic;
-import com.nurman.webtoon.model.ComicAddRequest;
-import com.nurman.webtoon.model.ComicUpdateRequest;
 import com.nurman.webtoon.model.PageResponse;
+import com.nurman.webtoon.model.chapter.ChapterResponse;
+import com.nurman.webtoon.model.comic.ComicAddRequest;
+import com.nurman.webtoon.model.comic.ComicResponse;
+import com.nurman.webtoon.model.comic.ComicUpdateRequest;
 import com.nurman.webtoon.repository.ComicRepository;
 
 import jakarta.transaction.Transactional;
@@ -54,7 +58,7 @@ public class ComicService {
     @Transactional
     public void updateComic(String comicId, MultipartFile cover, ComicUpdateRequest request) {
         validationService.validate(request);
-        var newId = Integer.parseInt(comicId);
+        Integer newId = Integer.parseInt(comicId);
         Comic comic = comicRepository.findById(newId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "comic not found"));
 
@@ -82,32 +86,63 @@ public class ComicService {
     }
 
     @Transactional
-    public Comic getById(String comicId) {
-        var newId = Integer.parseInt(comicId);
+    public ComicResponse getById(String comicId) {
+        Integer newId = Integer.parseInt(comicId);
         Comic comic = comicRepository.findById(newId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "comic not found"));
-        return comic;
+        return ComicResponse.builder()
+                .id(comic.getId())
+                .cover(comic.getCover())
+                .title(comic.getTitle())
+                .synopsis(comic.getSynopsis())
+                .author(comic.getAuthor())
+                .artist(comic.getArtist())
+                .type(comic.getType())
+                .url(comic.getUrl())
+                .createdAt(comic.getCreatedAt())
+                .build();
     }
 
     @Transactional
-    public PageResponse<Comic> getAll(String page, String size) {
-        var newPage = Integer.parseInt(page) - 1;
-        var newSize = Integer.parseInt(size);
+    public PageResponse<ComicResponse> getAll(String page, String size) {
+        Integer newPage = Integer.parseInt(page) - 1;
+        Integer newSize = Integer.parseInt(size);
         Pageable pagging = PageRequest.of(newPage, newSize, Sort.by("createdAt").descending());
         var comics = comicRepository.findAll(pagging);
 
-        PageResponse<Comic> pageAble = new PageResponse<Comic>();
-        pageAble.setContents(comics.getContent());
-        pageAble.setPage(newPage + 1);
-        pageAble.setSize(newSize);
-        pageAble.setTotalPages(comics.getTotalPages());
-        pageAble.setTotalEmelents(comics.getTotalElements());
-        return pageAble;
+        List<ComicResponse> response = comics.getContent().stream().map(comic -> ComicResponse.builder()
+                .id(comic.getId())
+                .cover(comic.getCover())
+                .title(comic.getTitle())
+                .synopsis(comic.getSynopsis())
+                .author(comic.getAuthor())
+                .artist(comic.getArtist())
+                .type(comic.getType())
+                .url(comic.getUrl())
+                .createdAt(comic.getCreatedAt())
+                .chapters(comic.getChapters().stream()
+                        .sorted((c1, c2) -> c2.getCreatedAt().compareTo(c1.getCreatedAt()))
+                        .limit(2)
+                        .map(ch -> ChapterResponse
+                                .builder()
+                                .id(ch.getId())
+                                .number(ch.getNumber())
+                                .createdAt(ch.getCreatedAt())
+                                .build())
+                        .toList())
+                .build()).toList();
+        return PageResponse.<ComicResponse>builder()
+                .contents(response)
+                .page(newPage + 1)
+                .size(newSize)
+                .totalPages(comics.getTotalPages())
+                .totalEmelents(comics.getTotalElements())
+                .build();
     }
 
     @Transactional
     public void delete(String comicId) {
-        var newId = Integer.parseInt(comicId);
+        Integer newId = Integer.parseInt(comicId);
         var comic = comicRepository.findById(newId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "comic not found"));
         cloudinaryService.deleteImage(comic.getCover());

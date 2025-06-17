@@ -5,8 +5,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.nurman.webtoon.model.UserRegisterRequest;
 import com.nurman.webtoon.model.WebResponse;
+import com.nurman.webtoon.model.user.UserRegisterRequest;
 import com.nurman.webtoon.service.UserService;
 
 import org.springframework.web.bind.annotation.PostMapping;

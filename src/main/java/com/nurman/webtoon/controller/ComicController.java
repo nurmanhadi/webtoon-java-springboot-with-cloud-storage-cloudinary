@@ -6,11 +6,11 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.nurman.webtoon.entity.Comic;
-import com.nurman.webtoon.model.ComicAddRequest;
-import com.nurman.webtoon.model.ComicUpdateRequest;
 import com.nurman.webtoon.model.PageResponse;
 import com.nurman.webtoon.model.WebResponse;
+import com.nurman.webtoon.model.comic.ComicAddRequest;
+import com.nurman.webtoon.model.comic.ComicResponse;
+import com.nurman.webtoon.model.comic.ComicUpdateRequest;
 import com.nurman.webtoon.service.ComicService;
 
 import org.springframework.web.bind.annotation.PathVariable;
@@ -72,16 +72,17 @@ public class ComicController {
 
     @GetMapping(path = pathPublick, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(code = HttpStatus.OK)
-    public WebResponse<PageResponse<Comic>> getMethodName(@RequestParam String page, @RequestParam String size) {
-        var comics = comicService.getAll(page, size);
-        return WebResponse.<PageResponse<Comic>>builder().data(comics).build();
+    public WebResponse<PageResponse<ComicResponse>> getMethodName(@RequestParam String page,
+            @RequestParam String size) {
+        var response = comicService.getAll(page, size);
+        return WebResponse.<PageResponse<ComicResponse>>builder().data(response).build();
     }
 
     @GetMapping(path = pathPublick + "/{comicId}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(code = HttpStatus.OK)
-    public WebResponse<Comic> getById(@PathVariable String comicId) {
-        var comic = comicService.getById(comicId);
-        return WebResponse.<Comic>builder().data(comic).build();
+    public WebResponse<ComicResponse> getById(@PathVariable String comicId) {
+        var response = comicService.getById(comicId);
+        return WebResponse.<ComicResponse>builder().data(response).build();
     }
 
     @DeleteMapping(path = pathSecure + "/{comicId}", produces = MediaType.APPLICATION_JSON_VALUE)

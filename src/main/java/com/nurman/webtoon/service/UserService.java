@@ -7,7 +7,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.nurman.webtoon.entity.User;
 import com.nurman.webtoon.helper.UserRole;
-import com.nurman.webtoon.model.UserRegisterRequest;
+import com.nurman.webtoon.model.user.UserRegisterRequest;
 import com.nurman.webtoon.repository.UserRepository;
 import com.nurman.webtoon.security.BCrypt;
 

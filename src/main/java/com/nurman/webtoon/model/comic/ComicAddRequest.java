@@ -1,4 +1,4 @@
-package com.nurman.webtoon.model;
+package com.nurman.webtoon.model.comic;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;

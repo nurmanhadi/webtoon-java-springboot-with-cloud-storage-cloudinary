@@ -12,8 +12,8 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
-import com.nurman.webtoon.model.AuthLoginRequest;
 import com.nurman.webtoon.model.TokenResponse;
+import com.nurman.webtoon.model.auth.AuthLoginRequest;
 import com.nurman.webtoon.repository.UserRepository;
 import com.nurman.webtoon.security.BCrypt;
 

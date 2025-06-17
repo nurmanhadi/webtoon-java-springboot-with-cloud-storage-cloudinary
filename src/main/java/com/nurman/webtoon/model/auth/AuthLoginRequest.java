@@ -1,4 +1,4 @@
-package com.nurman.webtoon.model;
+package com.nurman.webtoon.model.auth;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class UserRegisterRequest {
+public class AuthLoginRequest {
 
     @NotBlank
     @Size(max = 50)
