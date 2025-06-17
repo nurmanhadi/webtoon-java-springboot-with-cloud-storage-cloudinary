@@ -20,7 +20,7 @@ public class UserController {
 
     @PostMapping(path = "api/users", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(code = HttpStatus.CREATED)
-    public WebResponse<String> register(@RequestBody UserRegisterRequest request) {
+    public WebResponse<String> registerUser(@RequestBody UserRegisterRequest request) {
         userService.register(request);
         return WebResponse.<String>builder().data("OK").build();
     }

@@ -1,0 +1,9 @@
+DROP TABLE images;
+CREATE TABLE contents(
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    chapter_id BIGINT NOT NULL,
+    filename VARCHAR(100),
+    url VARCHAR(255),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_contents_chapters FOREIGN KEY(chapter_id) REFERENCES chapters(id) ON DELETE CASCADE ON UPDATE CASCADE
+);

@@ -1,7 +1,6 @@
 package com.nurman.webtoon.entity;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -12,7 +11,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -23,23 +21,21 @@ import lombok.Setter;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "chapters")
+@Table(name = "contents")
 @Entity
-public class Chapter {
+public class Content {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long number;
+    private String filename;
+    private String url;
 
     @Column(name = "created_at")
     @CreationTimestamp
     private LocalDateTime createdAt;
 
     @ManyToOne
-    @JoinColumn(name = "comic_id", referencedColumnName = "id")
-    private Comic comic;
-
-    @OneToMany(mappedBy = "chapter")
-    private List<Content> contents;
+    @JoinColumn(name = "chapter_id", referencedColumnName = "id")
+    private Chapter chapter;
 }

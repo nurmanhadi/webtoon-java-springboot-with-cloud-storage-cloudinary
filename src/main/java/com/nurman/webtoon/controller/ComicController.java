@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @RestController
 public class ComicController {
-    private final String pathPublick = "api/comics";
+    private final String pathPublic = "api/comics";
     private final String pathSecure = "api/secure/comics";
     @Autowired
     private ComicService comicService;
@@ -70,17 +70,18 @@ public class ComicController {
         return WebResponse.<String>builder().data("OK").build();
     }
 
-    @GetMapping(path = pathPublick, produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(path = pathPublic, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(code = HttpStatus.OK)
-    public WebResponse<PageResponse<ComicResponse>> getMethodName(@RequestParam String page,
+    public WebResponse<PageResponse<ComicResponse>> getAllComic(
+            @RequestParam String page,
             @RequestParam String size) {
         var response = comicService.getAll(page, size);
         return WebResponse.<PageResponse<ComicResponse>>builder().data(response).build();
     }
 
-    @GetMapping(path = pathPublick + "/{comicId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(path = pathPublic + "/{comicId}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(code = HttpStatus.OK)
-    public WebResponse<ComicResponse> getById(@PathVariable String comicId) {
+    public WebResponse<ComicResponse> getComicById(@PathVariable String comicId) {
         var response = comicService.getById(comicId);
         return WebResponse.<ComicResponse>builder().data(response).build();
     }
