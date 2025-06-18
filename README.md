@@ -163,7 +163,7 @@ Content-Type: application/json
 **Headers:**
 Content-Type: multipart/form-data, Authorization: Bearer JWT
 
-**Request Form:**
+**Request FORM:**
 
 | key      | type | required |
 |----------|------|----------|
@@ -203,7 +203,7 @@ comicId `String`
 **Headers:**
 Content-Type: multipart/form-data, Authorization: Bearer JWT
 
-**Request Form:**
+**Request FORM:**
 
 | key      | type | required |
 |----------|------|----------|
@@ -319,7 +319,7 @@ comicId `String`
 <summary>5. Delete Comic</summary>
 
 **Entpoint:**
-`GET /api/secure/comics/{comicId}`
+`DELETE /api/secure/comics/{comicId}`
 
 **Path Variable:**
 comicId `String` 
@@ -340,6 +340,286 @@ Authorization: Bearer JWT
 {
     "data": null,
     "error": "comic not found"
+}
+```
+</details>
+
+### Chapter
+
+<details>
+<summary>1. Add Chapter</summary>
+
+**Entpoint:**
+`POST api/secure/comics/{comicId}/chapters`
+
+**Path Variable:**
+comicId `String`
+
+**Headers:**
+Content-Type: application/json, Authorization: Bearer JWT
+
+**Request JSON:**
+```json
+{
+    "number": 1 //required
+}
+```
+
+**Response - Success (201)**
+```json
+{
+    "data": "OK",
+    "error": null
+}
+```
+    
+**Response - Error (400, 404)**
+```json
+{
+    "data": null,
+    "error": "comic not found"
+}
+```
+</details>
+
+<details>
+<summary>2. Update Chapter</summary>
+
+**Entpoint:**
+`PUT api/secure/comics/{comicId}/chapters/{chapterId}`
+
+**Path Variable:**
+comicId `String`, chapterId `String`
+
+**Headers:**
+Content-Type: application/json, Authorization: Bearer JWT
+
+**Request JSON:**
+```json
+{
+    "number": 1 //required
+}
+```
+
+**Response - Success (200)**
+```json
+{
+    "data": "OK",
+    "error": null
+}
+```
+    
+**Response - Error (400, 404)**
+```json
+{
+    "data": null,
+    "error": "chapter not found"
+}
+```
+</details>
+
+<details>
+<summary>3. Get All Chapter By Comic Id</summary>
+
+**Entpoint:**
+`GET /api/comics/{comicId}/chapters`
+
+**Path Variable:**
+comicId `String` 
+
+**Response - Success (200)**
+```json
+{
+    "data": [
+        {
+            "id": 8,
+            "number": 7,
+            "createdAt": "2025-06-17T17:02:28"
+        }
+    ],
+    "error": null
+}
+```
+</details>
+
+<details>
+<summary>4. Get Chapter By Id</summary>
+
+**Entpoint:**
+`GET /api/comics/{comicId}/chapters/{chapterId}`
+
+**Path Variable:**
+comicId `String`, chapterId `String` 
+
+**Response - Success (200)**
+```json
+{
+    "data": {
+        "id": 2,
+        "number": 2,
+        "createdAt": "2025-06-17T15:17:03"
+    },
+    "error": null
+}
+```
+
+**Response - Error (404)**
+```json
+{
+    "data": null,
+    "error": "chapter not found"
+}
+```
+</details>
+
+<details>
+<summary>5. Delete Chapter</summary>
+
+**Entpoint:**
+`DELETE /api/secure/comics/{comicId}/chapters/{chapterId}`
+
+**Path Variable:**
+comicId `String`, chapterId `String`
+
+**Headers:**
+Authorization: Bearer JWT
+
+**Response - Success (200)**
+```json
+{
+    "data": "OK",
+    "error": null
+}
+```
+
+**Response - Error (404)**
+```json
+{
+    "data": null,
+    "error": "chapter not found"
+}
+```
+</details>
+
+### Content
+
+<details>
+<summary>1. Add Content</summary>
+
+**Entpoint:**
+`POST api/secure/comics/{comicId}/chapters/{chapterId}/contents`
+
+**Path Variable:**
+comicId `String`, chapterId `String`
+
+**Headers:**
+Content-Type: multipart/form-data, Authorization: Bearer JWT
+
+**Request FORM:**
+| key        | type | required |
+|------------|------|----------|
+| content    | file | true     |
+
+**Response - Success (201)**
+```json
+{
+    "data": "OK",
+    "error": null
+}
+```
+    
+**Response - Error (400, 404)**
+```json
+{
+    "data": null,
+    "error": "chapter not found"
+}
+```
+</details>
+
+<details>
+<summary>2. Update Content</summary>
+
+**Entpoint:**
+`PUT api/secure/comics/{comicId}/chapters/{chapterId}/contents/{contentId}`
+
+**Path Variable:**
+comicId `String`, chapterId `String`, contentId `String`
+
+**Headers:**
+Content-Type: multipart/form-data, Authorization: Bearer JWT
+
+**Request FORM:**
+| key        | type | required |
+|------------|------|----------|
+| content    | file | true     |
+
+**Response - Success (200)**
+```json
+{
+    "data": "OK",
+    "error": null
+}
+```
+    
+**Response - Error (400, 404)**
+```json
+{
+    "data": null,
+    "error": "content not found"
+}
+```
+</details>
+
+<details>
+<summary>3. Get All Content By Chapter Id</summary>
+
+**Entpoint:**
+`GET /api/comics/{comicId}/chapters/{chapterId}/contents`
+
+**Path Variable:**
+comicId `String`, chapterId `String`
+
+**Response - Success (200)**
+```json
+{
+    "data": [
+        {
+            "id": 2,
+            "filename": "1750225391428",
+            "url": "url",
+            "createdAt": "2025-06-18T12:43:18"
+        }
+    ],
+    "error": null
+}
+```
+
+<details>
+<summary>4. Delete Content</summary>
+
+**Entpoint:**
+`DELETE /api/secure/comics/{comicId}/chapters/{chapterId}/contents/{contentId}`
+
+**Path Variable:**
+comicId `String`, chapterId `String`, contentId `String`
+
+**Headers:**
+Authorization: Bearer JWT
+
+**Response - Success (200)**
+```json
+{
+    "data": "OK",
+    "error": null
+}
+```
+
+**Response - Error (404)**
+```json
+{
+    "data": null,
+    "error": "content not found"
 }
 ```
 </details>
