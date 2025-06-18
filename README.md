@@ -14,6 +14,8 @@ A comprehensive RESTful API for managing webtoons, allowing users to handle comi
 - 📊 **Pagination and Sorting**
 - 🛡️ **Input Validation**
 - 📦 **Consistent JSON Response Wrapper**
+- 🫙 **Dockerfile and Docker Compose**
+- 🌏 **Ready Production**
 
 ---
 
