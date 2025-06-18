@@ -1,625 +1,214 @@
-## SUMMARY
+# 📚 Webtoon RESTful API
 
-RESTful API Webtoon management
-
----
-
-### Features
-
-1. AUTH JWT
-2. CRUD Comic
-3. CRUD Chapter
-4. CRUD Content
-5. Upload file image to cloud storage Cloudinary
-5. Pagination and Sorting
-6. Input Validation
-8. JSON Response Wrapper
+A comprehensive RESTful API for managing webtoons, allowing users to handle comics, chapters, and content (images) easily. Built with Spring Boot and Java 21, the application includes secure authentication with JWT, file uploads to Cloudinary, and robust input validation.
 
 ---
 
-### Tech Stack
+## 🚀 Features
 
-- Java 21
-- Springboot
-- MySQL
-- Cloud Storage Cloudinary
-- Lombok
-- Jakarta Bean Validation
-
----
-
-### Requirements
-
-- Java 21
-- Maven 3++
-- MySQL v8++
-- Cloudinary account (for upload image)
+- 🔐 **JWT Authentication**
+- 📚 **CRUD Operations for Comics**
+- 📖 **CRUD Operations for Chapters**
+- 🖼️ **CRUD Operations for Content (Image Pages)**
+- ☁️ **Upload Images to Cloudinary**
+- 📊 **Pagination and Sorting**
+- 🛡️ **Input Validation**
+- 📦 **Consistent JSON Response Wrapper**
 
 ---
 
-### Setup and Run
+## 🛠️ Tech Stack
 
-1. Clone Repository
-
-    ```bash
-    https://github.com/nurmanhadi/webtoon-java-springboot-with-cloud-storage-cloudinary.git
-    ```
-
-2. Configuration
-
-    Change configuration file value in `application.properties`
-
-    ```properties
-    spring.threads.virtual.enabled=true
-
-    spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
-    spring.datasource.url=jdbc:mysql://localhost:3306/your-database
-    spring.datasource.username=your-user
-    spring.datasource.password=yourpass
-
-    spring.datasource.hikari.minimum-idle=10
-    spring.datasource.hikari.maximum-pool-size=30
-
-    cloudinary.cloud-name=your-cloud-name
-    cloudinary.api-key=your-api-key
-    cloudinary.api-secret=your-api-secret
-    ```
-    
-3. Database Migration
-
-    Create table for your database in `folder database`
-
-4. Run Application
-
-    ```bash
-    ./mvnw spring-boot:run
-    ```
+- Java 21  
+- Spring Boot  
+- MySQL  
+- Cloudinary  
+- Lombok  
+- Jakarta Bean Validation  
 
 ---
 
-##  API Documentation
+## 📋 Requirements
 
-### User
-<details>
-<summary>1. Register User</summary>
+- Java 21  
+- Maven 3+  
+- MySQL 8+  
+- Cloudinary Account  
 
-**Entpoint:**
-`POST /api/users`
+---
 
-**Headers:**
-Content-Type: application/json
+## ⚙️ Setup & Run the Project
 
-**Request Body:**
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/nurmanhadi/webtoon-java-springboot-with-cloud-storage-cloudinary.git
+cd webtoon-java-springboot-with-cloud-storage-cloudinary
+```
+
+### 2. Configure `application.properties`
+
+Edit the file at `src/main/resources/application.properties`:
+
+```properties
+spring.threads.virtual.enabled=true
+
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+spring.datasource.url=jdbc:mysql://localhost:3306/your-database
+spring.datasource.username=your-username
+spring.datasource.password=your-password
+
+spring.datasource.hikari.minimum-idle=10
+spring.datasource.hikari.maximum-pool-size=30
+
+cloudinary.cloud-name=your-cloud-name
+cloudinary.api-key=your-api-key
+cloudinary.api-secret=your-api-secret
+```
+
+### 3. Setup Database
+
+Create the required tables using the schema provided in the `database/` folder.
+
+### 4. Run the Application
+
+```bash
+./mvnw spring-boot:run
+```
+
+---
+
+## 📖 API Documentation
+
+### 👤 User & Auth
+
+#### Register  
+`POST /api/users`  
 ```json
 {
-    "username": "username",
-    "password": "pass"
+  "username": "your_username",
+  "password": "your_password"
 }
 ```
 
-**Response - Success (201)**
+#### Login  
+`POST /api/auth/login`  
 ```json
 {
-    "data": "OK",
-    "error": null
-}
-```
-    
-**Response - Error (400)**
-```json
-{
-    "data": null,
-    "error": "username already exists"
-}
-```
-</details>
-
-### Auth
-
-<details>
-<summary>1. Login</summary>
-
-**Entpoint:**
-`POST /api/auth/login`
-
-**Headers:**
-Content-Type: application/json
-
-**Request Body:**
-```json
-{
-    "username": "username",
-    "password": "pass"
+  "username": "your_username",
+  "password": "your_password"
 }
 ```
 
-**Response - Success (200)**
-```json
-{
-    "data": {
-        "token": "jwt"
-    },
-    "error": null
-}
-```
-    
-**Response - Error (400)**
-```json
-{
-    "data": null,
-    "error": "username or password wrong"
-}
-```
-</details>
+---
 
-### Comic
+### 📘 Comic Endpoints
 
-<details>
-<summary>1. Add Comic</summary>
+#### Create Comic  
+`POST /api/secure/comics`  
+**Headers:** `Authorization: Bearer <JWT>`  
+**Form Data:**
 
-**Entpoint:**
-`POST /api/secure/comics`
+| Key     | Type | Required |
+|---------|------|----------|
+| cover   | file | ✅       |
+| title   | text | ✅       |
+| synopsis| text | ✅       |
+| author  | text | ✅       |
+| artist  | text | ✅       |
+| type    | text | ✅       |
 
-**Headers:**
-Content-Type: multipart/form-data, Authorization: Bearer JWT
-
-**Request FORM:**
-
-| key      | type | required |
-|----------|------|----------|
-| cover    | file | true     |
-| title    | text | true     |
-| synopsis | text | true     |
-| author   | text | true     |
-| artist   | text | true     |
-| type     | text | true     |
-
-**Response - Success (201)**
-```json
-{
-    "data": "OK",
-    "error": null
-}
-```
-    
-**Response - Error (400, 404)**
-```json
-{
-    "data": null,
-    "error": "comic not found"
-}
-```
-</details>
-
-<details>
-<summary>2. Update Comic</summary>
-
-**Entpoint:**
+#### Update Comic  
 `PUT /api/secure/comics/{comicId}`
 
-**Path Variable:**
-comicId `String`
+#### Get All Comics  
+`GET /api/comics?page=1&size=10`
 
-**Headers:**
-Content-Type: multipart/form-data, Authorization: Bearer JWT
-
-**Request FORM:**
-
-| key      | type | required |
-|----------|------|----------|
-| cover    | file | false    |
-| title    | text | false    |
-| synopsis | text | false    |
-| author   | text | false    |
-| artist   | text | false    |
-| type     | text | false    |
-
-**Response - Success (200)**
-```json
-{
-    "data": "OK",
-    "error": null
-}
-```
-    
-**Response - Error (400, 404)**
-```json
-{
-    "data": null,
-    "error": "comic not found"
-}
-```
-</details>
-
-<details>
-<summary>3. Get All Comic</summary>
-
-**Entpoint:**
-`GET /api/comics?page={page}&size={size}`
-
-**Query Param:**
-page `Number`, size `Number` 
-
-**Response - Success (200)**
-```json
-{
-    "data": {
-        "contents": [
-            {
-                "id": 7,
-                "cover": "1750085043501",
-                "title": "test7",
-                "synopsis": "test",
-                "author": "test",
-                "artist": "test",
-                "type": "TEST",
-                "url": "url",
-                "createdAt": "2025-06-16T00:00:00",
-                "chapters": [
-                    {
-                        "id": 8,
-                        "number": 7,
-                        "createdAt": "2025-06-17T17:02:28"
-                    },
-                    {
-                        "id": 7,
-                        "number": 6,
-                        "createdAt": "2025-06-17T17:02:24"
-                    }
-                ]
-            }
-        ],
-        "page": 1,
-        "size": 10,
-        "totalPages": 1,
-        "totalEmelents": 1
-    },
-    "error": null
-}
-```
-</details>
-
-<details>
-<summary>4. Get Comic By Id</summary>
-
-**Entpoint:**
+#### Get Comic by ID  
 `GET /api/comics/{comicId}`
 
-**Path Variable:**
-comicId `String` 
-
-**Response - Success (200)**
-```json
-{
-    "data": {
-        "id": 7,
-        "cover": "1750085043501",
-        "title": "test7",
-        "synopsis": "test",
-        "author": "test",
-        "artist": "test",
-        "type": "TEST",
-        "url": "url",
-        "createdAt": "2025-06-16T00:00:00"
-    },
-    "error": null
-}
-```
-
-**Response - Error (404)**
-```json
-{
-    "data": null,
-    "error": "comic not found"
-}
-```
-</details>
-
-<details>
-<summary>5. Delete Comic</summary>
-
-**Entpoint:**
+#### Delete Comic  
 `DELETE /api/secure/comics/{comicId}`
 
-**Path Variable:**
-comicId `String` 
+---
 
-**Headers:**
-Authorization: Bearer JWT
+### 📖 Chapter Endpoints
 
-**Response - Success (200)**
+#### Create Chapter  
+`POST /api/secure/comics/{comicId}/chapters`  
 ```json
-{
-    "data": "OK",
-    "error": null
-}
+{ "number": 1 }
 ```
 
-**Response - Error (404)**
+#### Update Chapter  
+`PUT /api/secure/comics/{comicId}/chapters/{chapterId}`  
 ```json
-{
-    "data": null,
-    "error": "comic not found"
-}
-```
-</details>
-
-### Chapter
-
-<details>
-<summary>1. Add Chapter</summary>
-
-**Entpoint:**
-`POST api/secure/comics/{comicId}/chapters`
-
-**Path Variable:**
-comicId `String`
-
-**Headers:**
-Content-Type: application/json, Authorization: Bearer JWT
-
-**Request JSON:**
-```json
-{
-    "number": 1 //required
-}
+{ "number": 2 }
 ```
 
-**Response - Success (201)**
-```json
-{
-    "data": "OK",
-    "error": null
-}
-```
-    
-**Response - Error (400, 404)**
-```json
-{
-    "data": null,
-    "error": "comic not found"
-}
-```
-</details>
-
-<details>
-<summary>2. Update Chapter</summary>
-
-**Entpoint:**
-`PUT api/secure/comics/{comicId}/chapters/{chapterId}`
-
-**Path Variable:**
-comicId `String`, chapterId `String`
-
-**Headers:**
-Content-Type: application/json, Authorization: Bearer JWT
-
-**Request JSON:**
-```json
-{
-    "number": 1 //required
-}
-```
-
-**Response - Success (200)**
-```json
-{
-    "data": "OK",
-    "error": null
-}
-```
-    
-**Response - Error (400, 404)**
-```json
-{
-    "data": null,
-    "error": "chapter not found"
-}
-```
-</details>
-
-<details>
-<summary>3. Get All Chapter By Comic Id</summary>
-
-**Entpoint:**
+#### Get All Chapters  
 `GET /api/comics/{comicId}/chapters`
 
-**Path Variable:**
-comicId `String` 
-
-**Response - Success (200)**
-```json
-{
-    "data": [
-        {
-            "id": 8,
-            "number": 7,
-            "createdAt": "2025-06-17T17:02:28"
-        }
-    ],
-    "error": null
-}
-```
-</details>
-
-<details>
-<summary>4. Get Chapter By Id</summary>
-
-**Entpoint:**
+#### Get Chapter by ID  
 `GET /api/comics/{comicId}/chapters/{chapterId}`
 
-**Path Variable:**
-comicId `String`, chapterId `String` 
-
-**Response - Success (200)**
-```json
-{
-    "data": {
-        "id": 2,
-        "number": 2,
-        "createdAt": "2025-06-17T15:17:03"
-    },
-    "error": null
-}
-```
-
-**Response - Error (404)**
-```json
-{
-    "data": null,
-    "error": "chapter not found"
-}
-```
-</details>
-
-<details>
-<summary>5. Delete Chapter</summary>
-
-**Entpoint:**
+#### Delete Chapter  
 `DELETE /api/secure/comics/{comicId}/chapters/{chapterId}`
 
-**Path Variable:**
-comicId `String`, chapterId `String`
+---
 
-**Headers:**
-Authorization: Bearer JWT
+### 🖼️ Content Endpoints
 
-**Response - Success (200)**
-```json
-{
-    "data": "OK",
-    "error": null
-}
-```
+#### Upload Content Image  
+`POST /api/secure/comics/{comicId}/chapters/{chapterId}/contents`  
+**Form Data:**
 
-**Response - Error (404)**
-```json
-{
-    "data": null,
-    "error": "chapter not found"
-}
-```
-</details>
+| Key     | Type | Required |
+|---------|------|----------|
+| content | file | ✅       |
 
-### Content
+#### Update Content  
+`PUT /api/secure/comics/{comicId}/chapters/{chapterId}/contents/{contentId}`
 
-<details>
-<summary>1. Add Content</summary>
-
-**Entpoint:**
-`POST api/secure/comics/{comicId}/chapters/{chapterId}/contents`
-
-**Path Variable:**
-comicId `String`, chapterId `String`
-
-**Headers:**
-Content-Type: multipart/form-data, Authorization: Bearer JWT
-
-**Request FORM:**
-| key        | type | required |
-|------------|------|----------|
-| content    | file | true     |
-
-**Response - Success (201)**
-```json
-{
-    "data": "OK",
-    "error": null
-}
-```
-    
-**Response - Error (400, 404)**
-```json
-{
-    "data": null,
-    "error": "chapter not found"
-}
-```
-</details>
-
-<details>
-<summary>2. Update Content</summary>
-
-**Entpoint:**
-`PUT api/secure/comics/{comicId}/chapters/{chapterId}/contents/{contentId}`
-
-**Path Variable:**
-comicId `String`, chapterId `String`, contentId `String`
-
-**Headers:**
-Content-Type: multipart/form-data, Authorization: Bearer JWT
-
-**Request FORM:**
-| key        | type | required |
-|------------|------|----------|
-| content    | file | true     |
-
-**Response - Success (200)**
-```json
-{
-    "data": "OK",
-    "error": null
-}
-```
-    
-**Response - Error (400, 404)**
-```json
-{
-    "data": null,
-    "error": "content not found"
-}
-```
-</details>
-
-<details>
-<summary>3. Get All Content By Chapter Id</summary>
-
-**Entpoint:**
+#### Get All Content by Chapter  
 `GET /api/comics/{comicId}/chapters/{chapterId}/contents`
 
-**Path Variable:**
-comicId `String`, chapterId `String`
-
-**Response - Success (200)**
-```json
-{
-    "data": [
-        {
-            "id": 2,
-            "filename": "1750225391428",
-            "url": "url",
-            "createdAt": "2025-06-18T12:43:18"
-        }
-    ],
-    "error": null
-}
-```
-
-<details>
-<summary>4. Delete Content</summary>
-
-**Entpoint:**
+#### Delete Content  
 `DELETE /api/secure/comics/{comicId}/chapters/{chapterId}/contents/{contentId}`
 
-**Path Variable:**
-comicId `String`, chapterId `String`, contentId `String`
+---
 
-**Headers:**
-Authorization: Bearer JWT
+## ✅ Success Response Format
 
-**Response - Success (200)**
 ```json
 {
-    "data": "OK",
-    "error": null
+  "data": "OK",
+  "error": null
 }
 ```
 
-**Response - Error (404)**
+## ❌ Error Response Format
+
 ```json
 {
-    "data": null,
-    "error": "content not found"
+  "data": null,
+  "error": "resource not found"
 }
 ```
-</details>
+
+---
+
+## 📌 Notes
+
+- All `/api/secure/**` endpoints require a valid JWT token.
+- File uploads are stored in Cloudinary and accessible via returned URLs.
+- Spring's validation handles input validation via Jakarta Bean Validation.
+- The project uses consistent response wrapping to standardize API output.
+
+---
+
+## 📝 License
+
+This project is licensed under the [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0). You are free to use, modify, and distribute this project under the terms of that license.
+
+---
