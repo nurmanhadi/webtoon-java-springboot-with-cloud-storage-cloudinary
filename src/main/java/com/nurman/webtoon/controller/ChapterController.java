@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.nurman.webtoon.model.WebResponse;
@@ -22,13 +23,14 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 @RestController
 public class ChapterController {
-    private final String pathPublic = "api/comics/{comicId}/chapters";
-    private final String pathSecure = "api/secure/comics/{comicId}/chapters";
+    private final String publicPath = "api/public/comics/{comicId}/chapters";
+    private final String adminPath = "api/admin/comics/{comicId}/chapters";
     @Autowired
     private ChapterService chapterService;
 
-    @PostMapping(path = pathSecure, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(path = adminPath, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(code = HttpStatus.CREATED)
+    @PreAuthorize("hasRole('ADMIN')")
     public WebResponse<String> addChapter(
             @PathVariable("comicId") String comicId,
             @RequestBody ChapterRequest request) {
@@ -36,9 +38,10 @@ public class ChapterController {
         return WebResponse.<String>builder().data("OK").build();
     }
 
-    @PutMapping(path = pathSecure
+    @PutMapping(path = adminPath
             + "/{chapterId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(code = HttpStatus.OK)
+    @PreAuthorize("hasRole('ADMIN')")
     public WebResponse<String> updateChapter(
             @PathVariable("comicId") String comicId,
             @PathVariable("chapterId") String chapterId,
@@ -47,7 +50,7 @@ public class ChapterController {
         return WebResponse.<String>builder().data("OK").build();
     }
 
-    @GetMapping(path = pathPublic
+    @GetMapping(path = publicPath
             + "/{chapterId}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(code = HttpStatus.OK)
     public WebResponse<ChapterResponse> getChapterById(
@@ -57,7 +60,7 @@ public class ChapterController {
         return WebResponse.<ChapterResponse>builder().data(response).build();
     }
 
-    @GetMapping(path = pathPublic, produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(path = publicPath, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(code = HttpStatus.OK)
     public WebResponse<List<ChapterResponse>> getAllChapterByComicId(
             @PathVariable("comicId") String comicId) {
@@ -65,9 +68,10 @@ public class ChapterController {
         return WebResponse.<List<ChapterResponse>>builder().data(response).build();
     }
 
-    @DeleteMapping(path = pathSecure
+    @DeleteMapping(path = adminPath
             + "/{chapterId}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(code = HttpStatus.OK)
+    @PreAuthorize("hasRole('ADMIN')")
     public WebResponse<String> deleteChapter(
             @PathVariable("comicId") String comicId,
             @PathVariable("chapterId") String chapterId) {

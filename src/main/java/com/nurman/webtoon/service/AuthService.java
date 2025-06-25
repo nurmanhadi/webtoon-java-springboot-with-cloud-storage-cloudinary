@@ -25,6 +25,8 @@ public class AuthService {
     private UserRepository userRepository;
     @Autowired
     private ValidationService validationService;
+    @Autowired
+    private JwtService jwtService;
 
     @Transactional
     public TokenResponse login(AuthLoginRequest request) {
@@ -35,12 +37,7 @@ public class AuthService {
         if (checkPw != true) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "username or password wrong");
         }
-        HashMap<String, String> claim = new HashMap<>();
-        claim.put("username", user.getUsername());
-        claim.put("role", user.getRole());
-        var exp = Date.from(Instant.now().plus(7, ChronoUnit.DAYS));
-        String token = JWT.create().withPayload(claim).withIssuer("auth0").withExpiresAt(exp)
-                .sign(Algorithm.HMAC256("nurman"));
+        String token = jwtService.create(user.getUsername(), user.getRole());
 
         return TokenResponse.builder().token(token).build();
     }

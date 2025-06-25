@@ -38,7 +38,7 @@ public class ComicService {
     private CloudinaryService cloudinaryService;
 
     @Transactional
-    public void addComic(MultipartFile cover, ComicAddRequest request) {
+    public void add(MultipartFile cover, ComicAddRequest request) {
         validationService.validate(request);
         imageService.validate(cover);
         String filename = String.valueOf(Instant.now().toEpochMilli());
@@ -55,7 +55,7 @@ public class ComicService {
     }
 
     @Transactional
-    public void updateComic(String comicId, MultipartFile cover, ComicUpdateRequest request) {
+    public void update(String comicId, MultipartFile cover, ComicUpdateRequest request) {
         validationService.validate(request);
         Integer newId = Integer.parseInt(comicId);
         Comic comic = comicRepository.findById(newId)

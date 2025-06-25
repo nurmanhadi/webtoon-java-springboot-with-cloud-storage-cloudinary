@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -22,13 +23,14 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 @RestController
 public class ContentController {
-    private final String pathPublic = "api/comics/{comicId}/chapters/{chapterId}/contents";
-    private final String pathSecure = "api/secure/comics/{comicId}/chapters/{chapterId}/contents";
+    private final String publicPath = "api/public/comics/{comicId}/chapters/{chapterId}/contents";
+    private final String adminPath = "api/admin/comics/{comicId}/chapters/{chapterId}/contents";
     @Autowired
     private ContentService contentService;
 
-    @PostMapping(path = pathSecure, consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(path = adminPath, consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(code = HttpStatus.CREATED)
+    @PreAuthorize("hasRole('ADMIN')")
     public WebResponse<String> addContent(
             @PathVariable("comicId") String comicId,
             @PathVariable("chapterId") String chapterId,
@@ -37,9 +39,10 @@ public class ContentController {
         return WebResponse.<String>builder().data("OK").build();
     }
 
-    @PutMapping(path = pathSecure
+    @PutMapping(path = adminPath
             + "/{contentId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(code = HttpStatus.OK)
+    @PreAuthorize("hasRole('ADMIN')")
     public WebResponse<String> updateContent(
             @PathVariable("comicId") String comicId,
             @PathVariable("chapterId") String chapterId,
@@ -49,7 +52,7 @@ public class ContentController {
         return WebResponse.<String>builder().data("OK").build();
     }
 
-    @GetMapping(path = pathPublic, produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(path = publicPath, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(code = HttpStatus.OK)
     public WebResponse<List<ContentResponse>> getAllContentByChapterId(
             @PathVariable("comicId") String comicId,
@@ -58,8 +61,9 @@ public class ContentController {
         return WebResponse.<List<ContentResponse>>builder().data(response).build();
     }
 
-    @DeleteMapping(path = pathSecure + "/{contentId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping(path = adminPath + "/{contentId}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(code = HttpStatus.OK)
+    @PreAuthorize("hasRole('ADMIN')")
     public WebResponse<String> deleteContentById(
             @PathVariable("comicId") String comicId,
             @PathVariable("chapterId") String chapterId,

@@ -3,6 +3,7 @@ package com.nurman.webtoon.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -23,13 +24,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @RestController
 public class ComicController {
-    private final String pathPublic = "api/comics";
-    private final String pathSecure = "api/secure/comics";
+    private final String publicPath = "api/public/comics";
+    private final String adminPath = "api/admin/comics";
     @Autowired
     private ComicService comicService;
 
-    @PostMapping(path = pathSecure, consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(path = adminPath, consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(code = HttpStatus.CREATED)
+    @PreAuthorize("hasRole('ADMIN')")
     public WebResponse<String> addComic(
             @RequestParam("cover") MultipartFile cover,
             @RequestParam("title") String title,
@@ -44,13 +46,14 @@ public class ComicController {
         request.setAuthor(author);
         request.setArtist(artist);
         request.setType(type);
-        comicService.addComic(cover, request);
+        comicService.add(cover, request);
         return WebResponse.<String>builder().data("OK").build();
     }
 
-    @PutMapping(path = pathSecure
+    @PutMapping(path = adminPath
             + "/{comicId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(code = HttpStatus.OK)
+    @PreAuthorize("hasRole('ADMIN')")
     public WebResponse<String> updateComic(
             @PathVariable(value = "comicId", required = false) String comicId,
             @RequestParam(value = "cover", required = false) MultipartFile cover,
@@ -66,11 +69,11 @@ public class ComicController {
         request.setAuthor(author);
         request.setArtist(artist);
         request.setType(type);
-        comicService.updateComic(comicId, cover, request);
+        comicService.update(comicId, cover, request);
         return WebResponse.<String>builder().data("OK").build();
     }
 
-    @GetMapping(path = pathPublic, produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(path = publicPath, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(code = HttpStatus.OK)
     public WebResponse<PageResponse<ComicResponse>> getAllComic(
             @RequestParam String page,
@@ -79,15 +82,16 @@ public class ComicController {
         return WebResponse.<PageResponse<ComicResponse>>builder().data(response).build();
     }
 
-    @GetMapping(path = pathPublic + "/{comicId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(path = publicPath + "/{comicId}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(code = HttpStatus.OK)
     public WebResponse<ComicResponse> getComicById(@PathVariable String comicId) {
         var response = comicService.getById(comicId);
         return WebResponse.<ComicResponse>builder().data(response).build();
     }
 
-    @DeleteMapping(path = pathSecure + "/{comicId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping(path = adminPath + "/{comicId}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(code = HttpStatus.OK)
+    @PreAuthorize("hasRole('ADMIN')")
     public WebResponse<String> delete(@PathVariable String comicId) {
         comicService.delete(comicId);
         return WebResponse.<String>builder().data("OK").build();

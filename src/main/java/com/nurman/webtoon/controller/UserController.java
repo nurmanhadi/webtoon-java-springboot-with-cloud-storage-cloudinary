@@ -18,16 +18,9 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @PostMapping(path = "api/users", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(path = "api/users/register", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(code = HttpStatus.CREATED)
     public WebResponse<String> registerUser(@RequestBody UserRegisterRequest request) {
-        userService.register(request);
-        return WebResponse.<String>builder().data("OK").build();
-    }
-
-    @PostMapping(path = "api/admins", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseStatus(code = HttpStatus.CREATED)
-    public WebResponse<String> addAdmin(@RequestBody UserRegisterRequest request) {
         userService.register(request);
         return WebResponse.<String>builder().data("OK").build();
     }
