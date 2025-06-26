@@ -1,6 +1,7 @@
 package com.nurman.webtoon.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -15,4 +16,12 @@ public interface ComicRepository extends JpaRepository<Comic, Integer> {
     @NonNull
     @EntityGraph(attributePaths = "chapters")
     List<Comic> findAll();
+
+    @Override
+    @NonNull
+    @EntityGraph(attributePaths = {
+            "comicCategories",
+            "comicCategories.category"
+    })
+    Optional<Comic> findById(@NonNull Integer id);
 }

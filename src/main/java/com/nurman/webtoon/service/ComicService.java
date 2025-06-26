@@ -15,10 +15,12 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.nurman.webtoon.entity.Comic;
 import com.nurman.webtoon.model.PageResponse;
+import com.nurman.webtoon.model.category.CategoryResponse;
 import com.nurman.webtoon.model.chapter.ChapterResponse;
 import com.nurman.webtoon.model.comic.ComicAddRequest;
 import com.nurman.webtoon.model.comic.ComicResponse;
 import com.nurman.webtoon.model.comic.ComicUpdateRequest;
+import com.nurman.webtoon.model.comicCategory.ComicCategoryResponse;
 import com.nurman.webtoon.repository.ComicRepository;
 
 import jakarta.transaction.Transactional;
@@ -99,6 +101,14 @@ public class ComicService {
                 .type(comic.getType())
                 .url(comic.getUrl())
                 .createdAt(comic.getCreatedAt())
+                .comicCategories(comic.getComicCategories().stream().map(cc -> ComicCategoryResponse
+                        .builder()
+                        .id(cc.getId())
+                        .category(CategoryResponse.builder()
+                                .id(cc.getCategory().getId())
+                                .name(cc.getCategory().getName())
+                                .build())
+                        .build()).toList())
                 .build();
     }
 

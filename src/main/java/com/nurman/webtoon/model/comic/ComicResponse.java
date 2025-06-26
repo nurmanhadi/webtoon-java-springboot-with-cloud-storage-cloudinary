@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import com.nurman.webtoon.model.chapter.ChapterResponse;
+import com.nurman.webtoon.model.comicCategory.ComicCategoryResponse;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,5 +26,6 @@ public class ComicResponse {
     private String url;
     private LocalDateTime createdAt;
     private List<ChapterResponse> chapters;
+    private List<ComicCategoryResponse> comicCategories;
 
 }

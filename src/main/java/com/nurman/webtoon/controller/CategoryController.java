@@ -13,6 +13,7 @@ import com.nurman.webtoon.model.category.CategoryRequest;
 import com.nurman.webtoon.model.category.CategoryResponse;
 import com.nurman.webtoon.service.CategoryService;
 
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -45,10 +46,17 @@ public class CategoryController {
         return WebResponse.<String>builder().data("OK").build();
     }
 
-    @PutMapping(path = publicPath, produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(path = publicPath, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(code = HttpStatus.OK)
     public WebResponse<List<CategoryResponse>> getAllCategories() {
         var response = categoryService.getAll();
         return WebResponse.<List<CategoryResponse>>builder().data(response).build();
+    }
+
+    @GetMapping(path = publicPath + "/{categoryId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(code = HttpStatus.OK)
+    public WebResponse<CategoryResponse> getCategoryById(@PathVariable String categoryId) {
+        var response = categoryService.getById(categoryId);
+        return WebResponse.<CategoryResponse>builder().data(response).build();
     }
 }

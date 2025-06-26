@@ -44,4 +44,7 @@ public class Comic {
 
     @OneToMany(mappedBy = "comic", fetch = FetchType.LAZY)
     private List<Chapter> chapters;
+
+    @OneToMany(mappedBy = "comic", fetch = FetchType.LAZY)
+    private List<ComicCategory> comicCategories;
 }
