@@ -82,10 +82,16 @@ Create the required tables using the schema provided in the `database/` folder.
 
 ## 📖 API Documentation
 
+
+| User   | Path       | Header                    | Required |
+|--------|------------|---------------------------|----------|
+| Admin  | api/admin  | Authorization: Bearer JWT | ✅       |
+| Anonim | api/public | None                      | ❌       |
+
 ### 👤 User & Auth
 
 #### Register  
-`POST /api/users`  
+`POST` `/api/auth/register`  
 ```json
 {
   "username": "your_username",
@@ -94,7 +100,7 @@ Create the required tables using the schema provided in the `database/` folder.
 ```
 
 #### Login  
-`POST /api/auth/login`  
+`POST` `/api/auth/login`  
 ```json
 {
   "username": "your_username",
@@ -107,8 +113,8 @@ Create the required tables using the schema provided in the `database/` folder.
 ### 📘 Comic Endpoints
 
 #### Create Comic  
-`POST /api/secure/comics`  
-**Headers:** `Authorization: Bearer <JWT>`  
+`POST` `/api/admin/comics`
+
 **Form Data:**
 
 | Key     | Type | Required |
@@ -121,48 +127,52 @@ Create the required tables using the schema provided in the `database/` folder.
 | type    | text | ✅       |
 
 #### Update Comic  
-`PUT /api/secure/comics/{comicId}`
+`PUT` `/api/admin/comics/{comicId}`
 
 #### Get All Comics  
-`GET /api/comics?page=1&size=10`
+`GET` `/api/public/comics?page=1&size=10`
 
 #### Get Comic by ID  
-`GET /api/comics/{comicId}`
+`GET` `/api/public/comics/{comicId}`
 
 #### Delete Comic  
-`DELETE /api/secure/comics/{comicId}`
+`DELETE` `/api/admin/comics/{comicId}`
 
 ---
 
 ### 📖 Chapter Endpoints
 
 #### Create Chapter  
-`POST /api/secure/comics/{comicId}/chapters`  
+`POST` `/api/admin/comics/{comicId}/chapters`  
 ```json
-{ "number": 1 }
+{
+  "number": 1
+}
 ```
 
 #### Update Chapter  
-`PUT /api/secure/comics/{comicId}/chapters/{chapterId}`  
+`PUT` `/api/admin/comics/{comicId}/chapters/{chapterId}`  
 ```json
-{ "number": 2 }
+{
+  "number": 2
+}
 ```
 
 #### Get All Chapters  
-`GET /api/comics/{comicId}/chapters`
+`GET` `/api/public/comics/{comicId}/chapters`
 
 #### Get Chapter by ID  
-`GET /api/comics/{comicId}/chapters/{chapterId}`
+`GET` `/api/public/comics/{comicId}/chapters/{chapterId}`
 
 #### Delete Chapter  
-`DELETE /api/secure/comics/{comicId}/chapters/{chapterId}`
+`DELETE` `/api/admin/comics/{comicId}/chapters/{chapterId}`
 
 ---
 
 ### 🖼️ Content Endpoints
 
 #### Upload Content Image  
-`POST /api/secure/comics/{comicId}/chapters/{chapterId}/contents`  
+`POST` `/api/admin/comics/{comicId}/chapters/{chapterId}/contents`  
 **Form Data:**
 
 | Key     | Type | Required |
@@ -170,13 +180,56 @@ Create the required tables using the schema provided in the `database/` folder.
 | content | file | ✅       |
 
 #### Update Content  
-`PUT /api/secure/comics/{comicId}/chapters/{chapterId}/contents/{contentId}`
+`PUT` `/api/admin/comics/{comicId}/chapters/{chapterId}/contents/{contentId}`
 
 #### Get All Content by Chapter  
-`GET /api/comics/{comicId}/chapters/{chapterId}/contents`
+`GET` `/api/public/comics/{comicId}/chapters/{chapterId}/contents`
 
 #### Delete Content  
-`DELETE /api/secure/comics/{comicId}/chapters/{chapterId}/contents/{contentId}`
+`DELETE` `/api/admin/comics/{comicId}/chapters/{chapterId}/contents/{contentId}`
+
+---
+
+### 📖 Category Enpoints
+#### Add Category
+`POST` `/admin/categories`
+
+```json
+{
+  "name": "harem"
+}
+```
+
+#### Update Category
+`PUT` `/api/admin/categories/{categoryId}`
+
+```json
+{
+  "name": "action"
+}
+```
+
+#### Get All Category
+`GET` `/api/public/categories`
+
+#### Get Category by Id
+`GET` `/api/public/categories/{categoryId}`
+
+---
+
+### 📖 Comic Category Enpoints
+#### Add Comic Category
+`POST` `/api/admin/comic-categories`
+
+```json
+{
+  "comicId": 7,
+  "categoryId": 3
+}
+```
+
+#### Delete Comic Category
+`DELETE` `/api/admin/comic-categories/{comicCategoryId}`
 
 ---
 
@@ -202,7 +255,7 @@ Create the required tables using the schema provided in the `database/` folder.
 
 ## 📌 Notes
 
-- All `/api/secure/**` endpoints require a valid JWT token.
+- All `/api/admin/**` endpoints require a valid JWT token.
 - File uploads are stored in Cloudinary and accessible via returned URLs.
 - Spring's validation handles input validation via Jakarta Bean Validation.
 - The project uses consistent response wrapping to standardize API output.
