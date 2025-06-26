@@ -45,6 +45,6 @@ public class JwtFilter extends OncePerRequestFilter {
             response.setStatus(401);
             response.getWriter().write("invalid token: " + e.getMessage());
         }
+        filterChain.doFilter(request, response);
     }
-
 }
