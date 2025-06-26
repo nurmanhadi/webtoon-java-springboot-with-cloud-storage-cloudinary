@@ -192,7 +192,7 @@ Create the required tables using the schema provided in the `database/` folder.
 
 ### 📖 Category Enpoints
 #### Add Category
-`POST` `/admin/categories`
+`POST` `/api/admin/categories`
 
 ```json
 {
