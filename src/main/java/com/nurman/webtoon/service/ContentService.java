@@ -71,16 +71,15 @@ public class ContentService {
     }
 
     @Transactional
-    public List<ContentResponse> getAllByChapterId(String comicId, String chapterId) {
+    public List<ContentResponse> getAllByChapterNumber(String comicId, String chapterNumber) {
         Integer newComicId = Integer.parseInt(comicId);
-        Long newChapterId = (long) Integer.parseInt(chapterId);
+        Integer newChapterNumber = Integer.parseInt(chapterNumber);
         if (!comicRepository.existsById(newComicId)) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "comic not found");
         }
-        if (!chapterRepository.existsById(newChapterId)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "chapter not found");
-        }
-        var contents = contentRepository.findAllByChapterId(newChapterId);
+        var chapter = chapterRepository.findByComic_IdAndNumber(newComicId, newChapterNumber)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "chapter not found"));
+        var contents = contentRepository.findAllByChapterId(chapter.getId());
         var response = contents.stream().map(c -> ContentResponse
                 .builder()
                 .id(c.getId())

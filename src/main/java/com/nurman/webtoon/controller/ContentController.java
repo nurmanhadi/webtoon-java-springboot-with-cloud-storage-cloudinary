@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 @RestController
 public class ContentController {
-    private final String publicPath = "api/public/comics/{comicId}/chapters/{chapterId}/contents";
+    private final String publicPath = "api/public/comics/{comicId}/chapters/{chapterNumber}/contents";
     private final String adminPath = "api/admin/comics/{comicId}/chapters/{chapterId}/contents";
     @Autowired
     private ContentService contentService;
@@ -56,8 +56,8 @@ public class ContentController {
     @ResponseStatus(code = HttpStatus.OK)
     public WebResponse<List<ContentResponse>> getAllContentByChapterId(
             @PathVariable("comicId") String comicId,
-            @PathVariable("chapterId") String chapterId) {
-        var response = contentService.getAllByChapterId(comicId, chapterId);
+            @PathVariable("chapterNumber") String chapterNumber) {
+        var response = contentService.getAllByChapterNumber(comicId, chapterNumber);
         return WebResponse.<List<ContentResponse>>builder().data(response).build();
     }
 

@@ -182,8 +182,8 @@ Create the required tables using the schema provided in the `database/` folder.
 #### Update Content  
 `PUT` `/api/admin/comics/{comicId}/chapters/{chapterId}/contents/{contentId}`
 
-#### Get All Content by Chapter  
-`GET` `/api/public/comics/{comicId}/chapters/{chapterId}/contents`
+#### Get All Content by Chapter Number
+`GET` `/api/public/comics/{comicId}/chapters/{chapterNumber}/contents`
 
 #### Delete Content  
 `DELETE` `/api/admin/comics/{comicId}/chapters/{chapterId}/contents/{contentId}`
