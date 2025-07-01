@@ -63,7 +63,7 @@ public class ComicService {
         Comic comic = comicRepository.findById(newId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "comic not found"));
 
-        if (Objects.nonNull(cover.getOriginalFilename())) {
+        if (Objects.nonNull(cover)) {
             imageService.validate(cover);
             String coverUrl = cloudinaryService.uploadImage(cover, comic.getCover());
             comic.setUrl(coverUrl);

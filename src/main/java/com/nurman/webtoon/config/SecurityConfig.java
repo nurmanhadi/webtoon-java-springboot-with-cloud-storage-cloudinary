@@ -51,7 +51,7 @@ public class SecurityConfig {
             config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
             config.setAllowedHeaders(List.of("Content-Type", "Authorization"));
             config.setExposedHeaders(List.of("X-Custom-Header"));
-            config.setAllowCredentials(true);
+            config.setAllowCredentials(false);
             return config;
         };
     }
