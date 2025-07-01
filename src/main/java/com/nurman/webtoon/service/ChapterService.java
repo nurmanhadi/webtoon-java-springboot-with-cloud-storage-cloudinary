@@ -1,5 +1,6 @@
 package com.nurman.webtoon.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,11 +33,13 @@ public class ChapterService {
         Integer newComicId = Integer.parseInt(comicId);
         var comic = comicRepository.findById(newComicId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "comic not found"));
+        comic.setCreatedAt(LocalDateTime.now());
         Chapter chapter = new Chapter();
         chapter.setNumber(request.getNumber());
         chapter.setComic(comic);
 
         chapterRepository.save(chapter);
+        comicRepository.save(comic);
     }
 
     @Transactional
