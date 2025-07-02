@@ -3,11 +3,13 @@ package com.nurman.webtoon.config;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.scheduling.annotation.EnableAsync;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 
 @Configuration
+@EnableAsync
 public class CloudinaryConfig {
 
     @Value("${cloudinary.cloud-name}")
