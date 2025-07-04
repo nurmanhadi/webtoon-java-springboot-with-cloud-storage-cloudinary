@@ -228,6 +228,9 @@ Create the required tables using the schema provided in the `database/` folder.
 }
 ```
 
+### Get all by Category Id
+`GET` `/api/admin/comic-categories/categories/{categoryId}?page={page}&size={size}`
+
 #### Delete Comic Category
 `DELETE` `/api/admin/comic-categories/{comicCategoryId}`
 
