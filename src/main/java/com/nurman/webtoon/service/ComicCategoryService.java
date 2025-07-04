@@ -13,7 +13,6 @@ import com.nurman.webtoon.entity.ComicCategory;
 import com.nurman.webtoon.model.PageResponse;
 import com.nurman.webtoon.model.comic.ComicResponse;
 import com.nurman.webtoon.model.comicCategory.ComicCategoryRequest;
-import com.nurman.webtoon.model.comicCategory.ComicCategoryResponse;
 import com.nurman.webtoon.repository.CategoryRepository;
 import com.nurman.webtoon.repository.ComicCategoryRepository;
 import com.nurman.webtoon.repository.ComicRepository;
@@ -71,6 +70,7 @@ public class ComicCategoryService {
                         .author(cc.getComic().getAuthor())
                         .artist(cc.getComic().getArtist())
                         .type(cc.getComic().getType())
+                        .url(cc.getComic().getUrl())
                         .createdAt(cc.getComic().getCreatedAt())
                         .build())
                 .toList();

@@ -44,7 +44,8 @@ public class ComicCategoryController {
         return WebResponse.<String>builder().data("OK").build();
     }
 
-    @GetMapping(path = publicPath + "/{categoryId}")
+    @GetMapping(path = publicPath + "/{categoryId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(code = HttpStatus.OK)
     public WebResponse<PageResponse<ComicResponse>> getMethodName(
             @PathVariable String categoryId,
             @RequestParam("page") String page,
