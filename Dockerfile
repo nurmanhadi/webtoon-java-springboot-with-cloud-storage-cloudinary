@@ -7,7 +7,7 @@ COPY src ./src
 
 RUN mvn clean package -DskipTests --no-transfer-progress
 
-FROM eclipse-temurin:21
+FROM eclipse-temurin:21-jre-alpine
 
 WORKDIR /app
 COPY --from=build /app/target/*.jar /app/app.jar
