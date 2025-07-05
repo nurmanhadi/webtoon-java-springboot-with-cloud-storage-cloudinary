@@ -135,6 +135,12 @@ Create the required tables using the schema provided in the `database/` folder.
 #### Get Comic by ID  
 `GET` `/api/public/comics/{comicId}`
 
+#### Search Comic 
+`GET` `/api/public/comics/search?keyword={keyword}&page={page}&size={size}`
+
+#### Get ALl Comic By Type 
+`GET` `/api/public/comics/type?type={type}&page={page}&size={size}`
+
 #### Delete Comic  
 `DELETE` `/api/admin/comics/{comicId}`
 

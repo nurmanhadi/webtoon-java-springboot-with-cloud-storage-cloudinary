@@ -96,4 +96,24 @@ public class ComicController {
         comicService.delete(comicId);
         return WebResponse.<String>builder().data("OK").build();
     }
+
+    @GetMapping(path = publicPath + "/search", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(code = HttpStatus.OK)
+    public WebResponse<PageResponse<ComicResponse>> searchComic(
+            @RequestParam("keyword") String keyword,
+            @RequestParam("page") String page,
+            @RequestParam("size") String size) {
+        var response = comicService.search(keyword, page, size);
+        return WebResponse.<PageResponse<ComicResponse>>builder().data(response).build();
+    }
+
+    @GetMapping(path = publicPath + "/type", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(code = HttpStatus.OK)
+    public WebResponse<PageResponse<ComicResponse>> getAllComicByType(
+            @RequestParam("type") String type,
+            @RequestParam("page") String page,
+            @RequestParam("size") String size) {
+        var response = comicService.getAllByType(type, page, size);
+        return WebResponse.<PageResponse<ComicResponse>>builder().data(response).build();
+    }
 }

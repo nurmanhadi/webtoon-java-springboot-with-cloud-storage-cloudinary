@@ -160,4 +160,62 @@ public class ComicService {
         cloudinaryService.deleteImage(comic.getCover());
         comicRepository.deleteById(newId);
     }
+
+    @Transactional
+    public PageResponse<ComicResponse> search(String keyword, String page, String size) {
+        Integer newPage = Integer.parseInt(page) - 1;
+        Integer newSize = Integer.parseInt(size);
+        Pageable pageable = PageRequest.of(newPage, newSize);
+        var comics = comicRepository.findAllByTitleContainingIgnoreCase(keyword, pageable);
+
+        List<ComicResponse> comicResponse = comics.stream()
+                .map(c -> ComicResponse.builder()
+                        .id(c.getId())
+                        .cover(c.getCover())
+                        .title(c.getTitle())
+                        .synopsis(c.getSynopsis())
+                        .author(c.getAuthor())
+                        .artist(c.getArtist())
+                        .type(c.getType())
+                        .url(c.getUrl())
+                        .createdAt(c.getCreatedAt())
+                        .build())
+                .toList();
+        return PageResponse.<ComicResponse>builder()
+                .contents(comicResponse)
+                .page(newPage + 1)
+                .size(newSize)
+                .totalPages(comics.getTotalPages())
+                .totalEmelents(comics.getTotalElements())
+                .build();
+    }
+
+    @Transactional
+    public PageResponse<ComicResponse> getAllByType(String type, String page, String size) {
+        Integer newPage = Integer.parseInt(page) - 1;
+        Integer newSize = Integer.parseInt(size);
+        Pageable pageable = PageRequest.of(newPage, newSize);
+        var comics = comicRepository.findAllByType(type, pageable);
+
+        List<ComicResponse> comicResponse = comics.stream()
+                .map(c -> ComicResponse.builder()
+                        .id(c.getId())
+                        .cover(c.getCover())
+                        .title(c.getTitle())
+                        .synopsis(c.getSynopsis())
+                        .author(c.getAuthor())
+                        .artist(c.getArtist())
+                        .type(c.getType())
+                        .url(c.getUrl())
+                        .createdAt(c.getCreatedAt())
+                        .build())
+                .toList();
+        return PageResponse.<ComicResponse>builder()
+                .contents(comicResponse)
+                .page(newPage + 1)
+                .size(newSize)
+                .totalPages(comics.getTotalPages())
+                .totalEmelents(comics.getTotalElements())
+                .build();
+    }
 }
