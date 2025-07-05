@@ -212,9 +212,6 @@ Create the required tables using the schema provided in the `database/` folder.
 #### Get All Category
 `GET` `/api/public/categories`
 
-#### Get Category by Id
-`GET` `/api/public/categories/{categoryId}`
-
 ---
 
 ### 📖 Comic Category Enpoints

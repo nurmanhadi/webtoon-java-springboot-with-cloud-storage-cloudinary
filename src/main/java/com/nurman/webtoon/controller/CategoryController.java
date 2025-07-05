@@ -52,11 +52,4 @@ public class CategoryController {
         var response = categoryService.getAll();
         return WebResponse.<List<CategoryResponse>>builder().data(response).build();
     }
-
-    @GetMapping(path = publicPath + "/{categoryId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseStatus(code = HttpStatus.OK)
-    public WebResponse<CategoryResponse> getCategoryById(@PathVariable String categoryId) {
-        var response = categoryService.getById(categoryId);
-        return WebResponse.<CategoryResponse>builder().data(response).build();
-    }
 }
