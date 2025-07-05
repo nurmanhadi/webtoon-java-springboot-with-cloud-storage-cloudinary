@@ -7,10 +7,6 @@ COPY src ./src
 
 RUN mvn clean package -DskipTests --no-transfer-progress
 
-COPY . .
-RUN mvn install
-RUN mvn clean package
-
 FROM eclipse-temurin:21
 
 WORKDIR /app
