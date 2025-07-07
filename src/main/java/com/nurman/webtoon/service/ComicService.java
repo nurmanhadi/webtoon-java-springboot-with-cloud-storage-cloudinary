@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -22,8 +23,6 @@ import com.nurman.webtoon.model.comic.ComicResponse;
 import com.nurman.webtoon.model.comic.ComicUpdateRequest;
 import com.nurman.webtoon.model.comicCategory.ComicCategoryResponse;
 import com.nurman.webtoon.repository.ComicRepository;
-
-import jakarta.transaction.Transactional;
 
 @Service
 public class ComicService {
@@ -89,7 +88,7 @@ public class ComicService {
                 comicRepository.save(comic);
         }
 
-        @Transactional
+        @Transactional(readOnly = true)
         public ComicResponse getById(String comicId) {
                 Integer newId = Integer.parseInt(comicId);
                 Comic comic = comicRepository.findById(newId)
@@ -116,7 +115,7 @@ public class ComicService {
                                 .build();
         }
 
-        @Transactional
+        @Transactional(readOnly = true)
         public PageResponse<ComicResponse> getAll(String page, String size) {
                 Integer newPage = Integer.parseInt(page) - 1;
                 Integer newSize = Integer.parseInt(size);
@@ -167,7 +166,7 @@ public class ComicService {
                 comicRepository.deleteById(newId);
         }
 
-        @Transactional
+        @Transactional(readOnly = true)
         public PageResponse<ComicResponse> search(String keyword, String page, String size) {
                 Integer newPage = Integer.parseInt(page) - 1;
                 Integer newSize = Integer.parseInt(size);
@@ -196,7 +195,7 @@ public class ComicService {
                                 .build();
         }
 
-        @Transactional
+        @Transactional(readOnly = true)
         public PageResponse<ComicResponse> getAllByType(String type, String page, String size) {
                 Integer newPage = Integer.parseInt(page) - 1;
                 Integer newSize = Integer.parseInt(size);

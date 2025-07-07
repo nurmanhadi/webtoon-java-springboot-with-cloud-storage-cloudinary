@@ -5,16 +5,13 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.nurman.webtoon.entity.Category;
 import com.nurman.webtoon.model.category.CategoryRequest;
 import com.nurman.webtoon.model.category.CategoryResponse;
-import com.nurman.webtoon.model.comic.ComicResponse;
-import com.nurman.webtoon.model.comicCategory.ComicCategoryResponse;
 import com.nurman.webtoon.repository.CategoryRepository;
-
-import jakarta.transaction.Transactional;
 
 @Service
 public class CategoryService {
@@ -43,7 +40,7 @@ public class CategoryService {
                 categoryRepository.save(category);
         }
 
-        @Transactional
+        @Transactional(readOnly = true)
         public List<CategoryResponse> getAll() {
                 var categories = categoryRepository.findAll();
                 List<CategoryResponse> response = categories.stream().map(c -> CategoryResponse.builder()

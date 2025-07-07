@@ -7,6 +7,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.nurman.webtoon.entity.ComicCategory;
@@ -16,8 +17,6 @@ import com.nurman.webtoon.model.comicCategory.ComicCategoryRequest;
 import com.nurman.webtoon.repository.CategoryRepository;
 import com.nurman.webtoon.repository.ComicCategoryRepository;
 import com.nurman.webtoon.repository.ComicRepository;
-
-import jakarta.transaction.Transactional;
 
 @Service
 public class ComicCategoryService {
@@ -52,7 +51,7 @@ public class ComicCategoryService {
         comicCategoryRepository.deleteById(newcomicCategoryId);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public PageResponse<ComicResponse> getAllByCategoryId(String categoryId, String page, String size) {
         Integer newCategoryId = Integer.parseInt(categoryId);
         Integer newPage = Integer.parseInt(page) - 1;

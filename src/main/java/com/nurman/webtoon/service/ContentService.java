@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -14,8 +15,6 @@ import com.nurman.webtoon.model.content.ContentResponse;
 import com.nurman.webtoon.repository.ChapterRepository;
 import com.nurman.webtoon.repository.ComicRepository;
 import com.nurman.webtoon.repository.ContentRepository;
-
-import jakarta.transaction.Transactional;
 
 @Service
 public class ContentService {
@@ -70,7 +69,7 @@ public class ContentService {
         contentRepository.save(contentEnt);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public List<ContentResponse> getAllByChapterNumber(String comicId, String chapterNumber) {
         Integer newComicId = Integer.parseInt(comicId);
         Integer newChapterNumber = Integer.parseInt(chapterNumber);
