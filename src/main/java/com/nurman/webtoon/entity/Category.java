@@ -2,6 +2,7 @@ package com.nurman.webtoon.entity;
 
 import java.util.List;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -25,6 +26,7 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @Column(length = 20)
     private String name;
 
     @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)

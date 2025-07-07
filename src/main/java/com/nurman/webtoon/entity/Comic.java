@@ -11,6 +11,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -30,12 +31,25 @@ public class Comic {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @Column(length = 50)
     private String cover;
+
+    @Column(length = 100)
     private String title;
+
+    @Lob
     private String synopsis;
+
+    @Column(length = 50)
     private String author;
+
+    @Column(length = 50)
     private String artist;
+
+    @Column(length = 15)
     private String type;
+
+    @Column(length = 255)
     private String url;
 
     @Column(name = "created_at")

@@ -29,7 +29,10 @@ public class Content {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(length = 50)
     private String filename;
+
+    @Column(length = 255)
     private String url;
 
     @Column(name = "created_at")
