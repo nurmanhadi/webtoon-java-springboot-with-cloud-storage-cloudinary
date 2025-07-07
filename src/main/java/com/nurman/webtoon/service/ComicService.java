@@ -39,9 +39,6 @@ public class ComicService {
         @Autowired
         private CloudinaryService cloudinaryService;
 
-        @Autowired
-        private ImagekitService imagekitService;
-
         @Transactional
         public void add(MultipartFile cover, ComicAddRequest request) {
                 validationService.validate(request);
@@ -56,7 +53,6 @@ public class ComicService {
                 comic.setType(request.getType().toUpperCase());
 
                 String urlCover = cloudinaryService.uploadImage(cover, filename);
-                // String urlCover = imagekitService.upload(cover, filename);
                 comic.setUrl(urlCover);
                 comicRepository.save(comic);
         }
@@ -72,7 +68,6 @@ public class ComicService {
                 if (Objects.nonNull(cover)) {
                         imageService.validate(cover);
                         String coverUrl = cloudinaryService.uploadImage(cover, comic.getCover());
-                        // String coverUrl = imagekitService.upload(cover, comic.getCover());
 
                         comic.setUrl(coverUrl);
                 }
